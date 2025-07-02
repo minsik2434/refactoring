@@ -7,7 +7,7 @@ import base.Play;
 import java.text.NumberFormat;
 import java.util.*;
 
-public class StatementMain_ExtractMethod_volumeCreditsFor {
+public class StatementMain_ExtractMethod_Formatter {
     public static void main(String[] args) {
         Map<String, Play> plays = new HashMap<>();
         plays.put("hamlet", new Play("Hamlet", "tragedy"));
@@ -29,21 +29,23 @@ public class StatementMain_ExtractMethod_volumeCreditsFor {
         int totalAmount = 0;
         double volumeCredits = 0;
         StringBuilder result = new StringBuilder("청구 내역 (고객명 : " + invoice.getCustomer() + ") \n");
-        NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.KOREA);
 
         for(Performance perf : invoice.getPerformance()){
-            //메서드 추출
-            // performance 마다 할인 가격을 계산해 volumeCredits 에 더함
             volumeCredits += volumeCreditsFor(perf, plays);
-
             result.append(String.format("  %s: %s (%d석)\n", playFor(plays, perf).getName(),
-                    formatter.format(amountFor(perf, playFor(plays, perf))/100.0), perf.getAudience()));
+                    //formatter => format 함수로 변경
+                    won(amountFor(perf, playFor(plays, perf))), perf.getAudience()));
             totalAmount += amountFor(perf, playFor(plays, perf));
         }
 
-        result.append(String.format("총액 : %s\n", formatter.format(totalAmount / 100.0)));
-        result.append(String.format("적립 포인트 : %.1f점\n",volumeCredits));
+        //formatter => format 함수로 변경
+        result.append(String.format("총액 : %s\n", won(totalAmount)));
+        result.append(String.format("적립 포인트 : %.1f 점\n",volumeCredits));
         return result.toString();
+    }
+
+    static String won(double number){
+        return NumberFormat.getCurrencyInstance(Locale.KOREA).format(number / 100.0);
     }
 
     static double volumeCreditsFor(Performance perf, Map<String, Play> plays){

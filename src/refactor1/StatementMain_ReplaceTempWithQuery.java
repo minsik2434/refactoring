@@ -46,7 +46,7 @@ public class StatementMain_ReplaceTempWithQuery {
         }
 
         result.append(String.format("총액 : %s\n", formatter.format(totalAmount / 100.0)));
-        result.append(String.format("적립 포인트 : %s점\n",formatter.format(volumeCredits)));
+        result.append(String.format("적립 포인트 : %.1f점\n",volumeCredits));
         return result.toString();
     }
 
