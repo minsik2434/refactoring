@@ -7,7 +7,7 @@ import base.Play;
 import java.text.NumberFormat;
 import java.util.*;
 
-public class StatementMain_ExtractMethod {
+public class StatementMain_ExtractMethod_volumeCreditsFor {
     public static void main(String[] args) {
         Map<String, Play> plays = new HashMap<>();
         plays.put("hamlet", new Play("Hamlet", "tragedy"));
@@ -32,17 +32,13 @@ public class StatementMain_ExtractMethod {
         NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.KOREA);
 
         for(Performance perf : invoice.getPerformance()){
-            Play play = plays.get(perf.getPlayId());
-            // 추출된 메서드를 사용
-            int thisAmount = amountFor(perf, play);
-            volumeCredits += Math.max(perf.getAudience() - 30, 0);
-            if("comedy".equals(play.getType())){
-                volumeCredits += Math.floor(perf.getAudience() / 5.0);
-            }
+            //메서드 추출
+            // performance 마다 할인 가격을 계산해 volumeCredits 에 더함
+            volumeCredits += volumeCreditsFor(perf, plays);
 
-            result.append(String.format("  %s: %s (%d석)\n", play.getName(),
-                    formatter.format(thisAmount/100.0), perf.getAudience()));
-            totalAmount += thisAmount;
+            result.append(String.format("  %s: %s (%d석)\n", playFor(plays, perf).getName(),
+                    formatter.format(amountFor(perf, playFor(plays, perf))/100.0), perf.getAudience()));
+            totalAmount += amountFor(perf, playFor(plays, perf));
         }
 
         result.append(String.format("총액 : %s\n", formatter.format(totalAmount / 100.0)));
@@ -50,25 +46,38 @@ public class StatementMain_ExtractMethod {
         return result.toString();
     }
 
+    static double volumeCreditsFor(Performance perf, Map<String, Play> plays){
+        double result = 0;
+        result += Math.max(perf.getAudience() - 30,0);
+        if("comedy".equals(playFor(plays,perf).getType())){
+            result += Math.floor(perf.getAudience() / 5.0);
+        }
+        return result;
+    }
+
+    private static Play playFor(Map<String, Play> plays, Performance perf) {
+        return plays.get(perf.getPlayId());
+    }
+
     private static int amountFor(Performance perf, Play play){
-        int thisAmount;
+        int result;
         switch (play.getType()){
             case "tragedy":
-                thisAmount = 40000;
+                result = 40000;
                 if(perf.getAudience() > 30){
-                    thisAmount += 1000 * (perf.getAudience() - 30);
+                    result += 1000 * (perf.getAudience() - 30);
                 }
                 break;
             case "comedy":
-                thisAmount = 30000;
+                result = 30000;
                 if(perf.getAudience() > 20){
-                    thisAmount += 10000 + 500 * (perf.getAudience() - 20);
+                    result += 10000 + 500 * (perf.getAudience() - 20);
                 }
-                thisAmount += 300 * perf.getAudience();
+                result += 300 * perf.getAudience();
                 break;
             default:
                 throw new IllegalArgumentException("알수 없는 장르 : " + play.getType());
         }
-        return thisAmount;
+        return result;
     }
 }

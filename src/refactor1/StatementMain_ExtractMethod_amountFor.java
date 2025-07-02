@@ -7,14 +7,7 @@ import base.Play;
 import java.text.NumberFormat;
 import java.util.*;
 
-/*
-1.StatementMain
-2.ExtractMethod_amountFor
-3.Renaming
-4.ReplaceTempWithQuery
-5.ExtractMethod_volumeCreditsFor
- */
-public class StatementMain {
+public class StatementMain_ExtractMethod_amountFor {
     public static void main(String[] args) {
         Map<String, Play> plays = new HashMap<>();
         plays.put("hamlet", new Play("Hamlet", "tragedy"));
@@ -40,25 +33,8 @@ public class StatementMain {
 
         for(Performance perf : invoice.getPerformance()){
             Play play = plays.get(perf.getPlayId());
-            int thisAmount = 0;
-            switch (play.getType()){
-                case "tragedy":
-                    thisAmount = 40000;
-                    if(perf.getAudience() > 30){
-                        thisAmount += 1000 * (perf.getAudience() - 30);
-                    }
-                    break;
-                case "comedy":
-                    thisAmount = 30000;
-                    if(perf.getAudience() > 20){
-                        thisAmount += 10000 + 500 * (perf.getAudience() - 20);
-                    }
-                    thisAmount += 300 * perf.getAudience();
-                    break;
-                default:
-                    throw new IllegalArgumentException("알수 없는 장르 : " + play.getType());
-            }
-
+            // 추출된 메서드를 사용
+            int thisAmount = amountFor(perf, play);
             volumeCredits += Math.max(perf.getAudience() - 30, 0);
             if("comedy".equals(play.getType())){
                 volumeCredits += Math.floor(perf.getAudience() / 5.0);
@@ -72,5 +48,27 @@ public class StatementMain {
         result.append(String.format("총액 : %s\n", formatter.format(totalAmount / 100.0)));
         result.append(String.format("적립 포인트 : %s점\n",formatter.format(volumeCredits)));
         return result.toString();
+    }
+
+    private static int amountFor(Performance perf, Play play){
+        int thisAmount;
+        switch (play.getType()){
+            case "tragedy":
+                thisAmount = 40000;
+                if(perf.getAudience() > 30){
+                    thisAmount += 1000 * (perf.getAudience() - 30);
+                }
+                break;
+            case "comedy":
+                thisAmount = 30000;
+                if(perf.getAudience() > 20){
+                    thisAmount += 10000 + 500 * (perf.getAudience() - 20);
+                }
+                thisAmount += 300 * perf.getAudience();
+                break;
+            default:
+                throw new IllegalArgumentException("알수 없는 장르 : " + play.getType());
+        }
+        return thisAmount;
     }
 }
