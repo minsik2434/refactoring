@@ -7,7 +7,7 @@ import base.Play;
 import java.text.NumberFormat;
 import java.util.*;
 
-public class StatementMain_ExtractMethod_volumeCredits {
+public class StatementMain_ReplaceVolumeCreditWithQuery {
     public static void main(String[] args) {
         Map<String, Play> plays = new HashMap<>();
         plays.put("hamlet", new Play("Hamlet", "tragedy"));
