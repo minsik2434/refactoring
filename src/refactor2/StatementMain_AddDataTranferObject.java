@@ -31,14 +31,14 @@ public class StatementMain_AddDataTranferObject {
         for(Performance perf : invoice.getPerformance()){
             enPerf.add(new EnrichedPerformance(
                     playFor(plays, perf).getName(),
-                    won(amountFor(perf, playFor(plays, perf))),
+                    amountFor(perf, playFor(plays, perf)),
                     perf.getAudience()
             ));
         }
         StatementData data = new StatementData(
                 invoice.getCustomer(),
                 enPerf,
-                won(totalAmount(invoice, plays)),
+                totalAmount(invoice, plays),
                 totalVolumeCredits(invoice, plays)
         );
         return renderPlainText(data);
@@ -48,9 +48,9 @@ public class StatementMain_AddDataTranferObject {
         StringBuilder result = new StringBuilder("청구 내역 (고객명 : " + data.getCustomerName() + ") \n");
         for(EnrichedPerformance perf : data.getPerformances()){
             result.append(String.format("  %s: %s (%d석)\n", perf.getPlayName(),
-                    perf.getAmountFormat(), perf.getAudience()));
+                    won(perf.getAmount()), perf.getAudience()));
         }
-        result.append(String.format("총액 : %s\n", data.getTotalAmountFormat()));
+        result.append(String.format("총액 : %s\n", won(data.getTotalAmount())));
         result.append(String.format("적립 포인트 : %.1f 점\n", data.getTotalCredits()));
         return result.toString();
     }

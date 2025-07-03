@@ -2,12 +2,12 @@ package refactor2;
 
 public class EnrichedPerformance {
     private String playName;
-    private String amountFormat;
+    private int amount;
     private int audience;
 
-    public EnrichedPerformance(String playName, String amount, int audience) {
+    public EnrichedPerformance(String playName, int amount, int audience) {
         this.playName = playName;
-        this.amountFormat = amount;
+        this.amount = amount;
         this.audience = audience;
     }
 
@@ -19,7 +19,7 @@ public class EnrichedPerformance {
         return audience;
     }
 
-    public String getAmountFormat() {
-        return amountFormat;
+    public int getAmount() {
+        return amount;
     }
 }

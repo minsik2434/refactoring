@@ -5,13 +5,13 @@ import java.util.List;
 public class StatementData {
     private String customerName;
     private List<EnrichedPerformance> performances;
-    private String totalAmountFormat;
+    private int totalAmount;
     private double totalCredits;
 
-    public StatementData(String customerName, List<EnrichedPerformance> performances, String totalAmount, double totalCredits) {
+    public StatementData(String customerName, List<EnrichedPerformance> performances, int totalAmount, double totalCredits) {
         this.customerName = customerName;
         this.performances = performances;
-        this.totalAmountFormat = totalAmount;
+        this.totalAmount = totalAmount;
         this.totalCredits = totalCredits;
     }
 
@@ -23,8 +23,8 @@ public class StatementData {
         return performances;
     }
 
-    public String getTotalAmountFormat() {
-        return totalAmountFormat;
+    public int getTotalAmount() {
+        return totalAmount;
     }
 
     public double getTotalCredits() {
