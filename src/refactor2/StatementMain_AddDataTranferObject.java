@@ -56,20 +56,17 @@ public class StatementMain_AddDataTranferObject {
     }
 
     private static int totalAmount(Invoice invoice, Map<String, Play> plays){
-        int result = 0;
-        for(Performance perf : invoice.getPerformance()){
-            result += amountFor(perf, playFor(plays, perf));
-        }
-        return result;
+        return invoice.getPerformance().stream()
+                .mapToInt(perf -> amountFor(perf, playFor(plays, perf)))
+                .sum();
     }
 
     private static double totalVolumeCredits(Invoice invoice, Map<String, Play> plays) {
-        double result = 0;
-        for(Performance perf : invoice.getPerformance()){
-            result += volumeCreditsFor(perf, plays);
-        }
-        return result;
+        return invoice.getPerformance().stream()
+                .mapToDouble(perf -> volumeCreditsFor(perf, plays))
+                .sum();
     }
+
 
     static String won(double number){
         return NumberFormat.getCurrencyInstance(Locale.KOREA).format(number / 100.0);
