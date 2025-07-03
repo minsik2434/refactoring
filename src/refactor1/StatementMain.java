@@ -13,6 +13,8 @@ import java.util.*;
 3.Renaming
 4.ReplaceTempWithQuery
 5.ExtractMethod_volumeCreditsFor
+6.ReplaceVolumeCreditWithQuery
+7.ReplaceTotalAmountWithQuery
  */
 public class StatementMain {
     public static void main(String[] args) {
