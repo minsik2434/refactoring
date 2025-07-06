@@ -6,7 +6,12 @@ import base.Play;
 
 import java.text.NumberFormat;
 import java.util.*;
-
+/*
+    1. ExtractMethod_renderer
+    2. AddDataTransferObject
+    3. ExtractMethod_CreateStatementData
+    4. AddHtmlRender
+ */
 public class StatementMain {
     public static void main(String[] args) {
         Map<String, Play> plays = new HashMap<>();

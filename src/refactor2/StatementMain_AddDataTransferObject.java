@@ -7,7 +7,7 @@ import base.Play;
 import java.text.NumberFormat;
 import java.util.*;
 
-public class StatementMain_AddDataTranferObject {
+public class StatementMain_AddDataTransferObject {
     public static void main(String[] args) {
         Map<String, Play> plays = new HashMap<>();
         plays.put("hamlet", new Play("Hamlet", "tragedy"));
