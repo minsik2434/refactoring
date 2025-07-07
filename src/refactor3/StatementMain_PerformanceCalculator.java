@@ -38,22 +38,26 @@ public class StatementMain_PerformanceCalculator {
 
     private static StatementData createStatementData(Invoice invoice, Map<String, Play> plays) {
             List<EnrichedPerformance> enPerf = enrichPerformance(invoice, plays);
+            int totalAmount = enPerf.stream().mapToInt(EnrichedPerformance::getAmount).sum();
+            double totalCredits = enPerf.stream().mapToDouble(EnrichedPerformance::getCredit).sum();
             return new StatementData(
                     invoice.getCustomer(),
                     enPerf,
-                    totalAmount(invoice, plays),
-                    totalVolumeCredits(invoice, plays)
+                    totalAmount,
+                    totalCredits
             );
     }
 
     private static List<EnrichedPerformance> enrichPerformance(Invoice invoice, Map<String, Play> plays) {
         return invoice.getPerformance().stream()
                 .map(perf -> {
-                    PerformanceCalculator calculator = new PerformanceCalculator(perf, playFor(plays, perf));
+                    Play play = playFor(plays, perf);
+                    PerformanceCalculator calculator = PerformanceCalculator.create(perf, play);
                     return new EnrichedPerformance(
-                            playFor(plays,perf).getName(),
+                            play.getName(),
                             calculator.amount(),
-                            perf.getAudience()
+                            perf.getAudience(),
+                            calculator.volumeCredits()
                             );
 
                 }).toList();
@@ -87,19 +91,6 @@ public class StatementMain_PerformanceCalculator {
         result.append(String.format("<p>적립 포인트 : <em>%.1f</em> 점</p>\n", data.getTotalCredits()));
         return result.toString();
     }
-
-    private static int totalAmount(Invoice invoice, Map<String, Play> plays){
-        return invoice.getPerformance().stream()
-                .mapToInt(perf -> amountFor(perf, playFor(plays, perf)))
-                .sum();
-    }
-
-    private static double totalVolumeCredits(Invoice invoice, Map<String, Play> plays) {
-        return invoice.getPerformance().stream()
-                .mapToDouble(perf -> volumeCreditsFor(perf, plays))
-                .sum();
-    }
-
 
     static String won(double number){
         return NumberFormat.getCurrencyInstance(Locale.KOREA).format(number / 100.0);

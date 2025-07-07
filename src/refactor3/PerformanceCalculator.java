@@ -3,36 +3,29 @@ package refactor3;
 import base.Performance;
 import base.Play;
 
-import java.util.Map;
 
-public class PerformanceCalculator {
-    private Performance perf;
-    private Play play;
+public abstract class PerformanceCalculator {
+    protected Performance perf;
+    protected Play play;
 
     public PerformanceCalculator(Performance perf, Play play) {
         this.perf = perf;
         this.play = play;
     }
 
-     public int amount(){
-        int result;
+    public abstract int amount();
+    public int volumeCredits(){ //기본 적립 포인트 계산
+        return Math.max(perf.getAudience() - 30, 0);
+    }
+
+    public static PerformanceCalculator create(Performance perf, Play play){
         switch (play.getType()){
             case "tragedy":
-                result = 40000;
-                if(perf.getAudience() > 30){
-                    result += 1000 * (perf.getAudience() - 30);
-                }
-                break;
+                return new TragedyCalculator(perf, play);
             case "comedy":
-                result = 30000;
-                if(perf.getAudience() > 20){
-                    result += 10000 + 500 * (perf.getAudience() - 20);
-                }
-                result += 300 * perf.getAudience();
-                break;
+                return new ComedyCalculator(perf, play);
             default:
-                throw new IllegalArgumentException("알수 없는 장르 : " + play.getType());
+                throw new IllegalArgumentException("알 수 없는 장르" + play.getType());
         }
-        return result;
     }
 }
