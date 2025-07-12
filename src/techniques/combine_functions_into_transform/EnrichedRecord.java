@@ -1,4 +1,4 @@
-package techniques.combinefunctionsintotransform;
+package techniques.combine_functions_into_transform;
 
 public class EnrichedRecord {
     private String firstName;
