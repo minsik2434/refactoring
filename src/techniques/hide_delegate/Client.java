@@ -1,0 +1,17 @@
+package techniques.hide_delegate;
+
+public class Client {
+    public static void main(String[] args) {
+        Department itDept = new Department("IT", "Alice Manager");
+        Employee emp1 = new Employee("E001", "Bob", itDept);
+        System.out.println("Employee: " + emp1.getName());
+        // 클라이언트가 위임 메서드를 호출하도록 수정
+        System.out.println("Department: " + emp1.getDepartmentName());
+        System.out.println("Department Manager: " + emp1.getDepartmentManager());
+
+        Department hrDept = new Department("HR", "Charlie Manager");
+        Employee emp2 = new Employee("E002", "David", hrDept);
+        System.out.println("Employee: " + emp2.getName());
+        System.out.println("Department Manager: " + emp2.getDepartmentManager());
+    }
+}
